@@ -1,0 +1,533 @@
+body.letter-lesson main {
+  overflow-y: auto;
+}
+body.letter-lesson #target {
+  max-height: none;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+body.letter-lesson #prompt {
+  flex-shrink: 0;
+}
+body.letter-lesson #hint {
+  min-height: 0;
+  font-size: 16px;
+}
+body.letter-lesson header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px 24px;
+  min-height: 75px;
+}
+body.letter-lesson .hleft {
+  grid-column: 1;
+  grid-row: 1;
+}
+body.letter-lesson #topStatus {
+  position: static;
+  transform: none;
+  grid-column: 2;
+  grid-row: 1;
+  margin-top: 3px;
+}
+body.letter-lesson .hright {
+  grid-column: 3;
+  grid-row: 1;
+  min-width: 0;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+body.letter-lesson #round {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 16px;
+}
+.lesson-stat {
+  white-space: nowrap;
+}
+.lesson-stat b {
+  color: var(--fg);
+  font-weight: 600;
+}
+.lesson-stat.negative b {
+  color: var(--debt);
+}
+.lesson-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+/* 第1章：左侧音频，右侧字母 */
+.match-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: min(440px, 88vw);
+  margin: 8px 0;
+}
+.match-exercise {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.match-instruction {
+  max-width: 88vw;
+  margin: 0;
+  color: #a7b2c1;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+.match-board[data-kind='single'] .match-letters,
+.match-board[data-kind='contrast'] .match-letters {
+  justify-content: center;
+}
+.match-help-note {
+  margin: 0;
+  max-width: 88vw;
+  color: #8a94a3;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+.match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.match-col-label {
+  color: #8a94a3;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+.match-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  height: 68px;
+  padding: 0;
+  background: #171d25;
+  border: 2px solid #303945;
+  border-bottom-width: 4px;
+  border-radius: 14px;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    opacity 0.15s;
+}
+@media (hover: hover) {
+  .match-card:not(.matched):hover {
+    border-color: #52657c;
+    background: #1c2530;
+  }
+  .listen-icon-btn:hover,
+  .peek-btn:hover {
+    color: var(--accent);
+    background: rgba(74, 158, 255, 0.08);
+  }
+}
+.match-card.selected,
+.match-card.selected:hover {
+  border-color: var(--accent);
+  background: rgba(74, 158, 255, 0.12);
+}
+.match-card.wrong {
+  border-color: var(--danger);
+}
+.match-card:active:not(.matched) {
+  border-bottom-width: 2px;
+}
+.match-card:focus-visible,
+.match-letter-select:focus-visible,
+.listen-icon-btn:focus-visible,
+.peek-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.match-card.matched {
+  opacity: 0.35;
+  pointer-events: none;
+  border-color: var(--done);
+}
+.match-letter-select {
+  align-self: stretch;
+  flex: 1;
+  min-width: 0;
+  padding: 0 0 0 16px;
+  background: none;
+  border: 0;
+  border-radius: 10px;
+  color: var(--fg);
+  font-weight: 600;
+  line-height: 1;
+  font-family: inherit;
+  font-size: 26px;
+  cursor: pointer;
+}
+.match-card:has(.match-letter-select) {
+  gap: 0;
+  padding-right: 6px;
+}
+.listen-icon-btn {
+  background: none;
+  border: none;
+  color: #8a94a3;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+}
+.audio-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 28px;
+}
+.audio-wave i {
+  display: block;
+  width: 3px;
+  height: var(--bar-height);
+  border-radius: 2px;
+  background: currentColor;
+}
+.match-card.playing .audio-wave i {
+  animation: wave-pulse 0.6s ease-in-out infinite alternate;
+  animation-delay: var(--bar-delay);
+}
+@keyframes wave-pulse {
+  to {
+    transform: scaleY(0.4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .match-card.playing .audio-wave i {
+    animation: none;
+  }
+  body.letter-lesson .shake,
+  body.letter-lesson .ok {
+    animation: none;
+  }
+}
+
+/* 第2章：顺序完形填空 3 空样式 */
+.cloze-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: min(640px, 90vw);
+}
+.cloze-slots {
+  display: flex;
+  gap: clamp(4px, 1.4vw, 12px);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+}
+.cloze-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2em;
+  height: 1.4em;
+  color: var(--dim);
+}
+.cloze-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.4em;
+  border-bottom: 3px solid var(--dim);
+  color: var(--fg);
+  min-width: 1.2em;
+  text-align: center;
+}
+.cloze-gap.active {
+  border-color: var(--accent);
+  background: rgba(74, 158, 255, 0.1);
+}
+.cloze-gap.done {
+  color: var(--done);
+  border-color: var(--done);
+}
+.cloze-gap.wrong {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.cloze-gap.ghost {
+  color: rgba(232, 236, 241, 0.32);
+}
+.cloze-status {
+  min-height: 22px;
+  color: #8a94a3;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 22px;
+}
+.cloze-status.success {
+  color: var(--done);
+}
+.cloze-status.error {
+  color: var(--danger);
+}
+.cloze-help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 12px;
+}
+.cloze-help-note {
+  color: #8a94a3;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.peek-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 48px;
+  background: transparent;
+  border: 0;
+  color: #a7b2c1;
+  padding: 0 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  line-height: 1.4;
+  font-family: inherit;
+  font-size: 13px;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+.peek-btn[aria-pressed='true'] {
+  color: var(--accent);
+}
+.peek-btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-ch.active::before,
+  .tl-gain,
+  .tl-debt {
+    transition: none;
+  }
+}
+.intro-board {
+  width: min(720px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.intro-description {
+  margin: 0;
+  color: #a7b2c1;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.alphabet-tile {
+  min-width: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid #303945;
+  border-radius: 10px;
+  background: #171d25;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+}
+button.alphabet-tile {
+  cursor: pointer;
+}
+.alphabet-tile .lesson-icon {
+  color: #8a94a3;
+}
+.alphabet-tile.heard {
+  border-color: #52657c;
+}
+.alphabet-tile.playing {
+  background: rgba(74, 158, 255, 0.12);
+  border-color: var(--accent);
+}
+.alphabet-tile.playing .lesson-icon {
+  color: var(--accent);
+}
+.alphabet-tile.ghost {
+  color: rgba(232, 236, 241, 0.32);
+  background: transparent;
+}
+.alphabet-tile.current {
+  border-color: var(--accent);
+  background: rgba(74, 158, 255, 0.08);
+}
+.alphabet-tile.done {
+  color: var(--done);
+  border-color: rgba(61, 220, 132, 0.4);
+  background: rgba(61, 220, 132, 0.06);
+}
+.intro-status {
+  color: #a7b2c1;
+  font-size: 14px;
+  font-weight: 400;
+  min-height: 24px;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+.intro-status.error {
+  color: var(--danger);
+}
+.intro-status.success {
+  color: var(--done);
+}
+.lesson-continue {
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--bg);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lesson-continue:disabled {
+  background: #1c2128;
+  border-color: #303945;
+  color: #8a94a3;
+  cursor: not-allowed;
+}
+.intro-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.lesson-retry {
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid #3a4655;
+  border-radius: 10px;
+  background: #171d25;
+  color: var(--fg);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.lesson-retry:hover {
+  border-color: var(--accent);
+  background: #1b2634;
+}
+.lesson-continue:focus-visible,
+.lesson-retry:focus-visible,
+.alphabet-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+@media (hover: hover) {
+  button.alphabet-tile:hover {
+    border-color: var(--accent);
+  }
+  .lesson-continue:not(:disabled):hover {
+    background: #73b4ff;
+  }
+}
+@media (max-width: 600px) {
+  .alphabet-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .alphabet-tile {
+    height: 54px;
+    gap: 8px;
+  }
+  .intro-board {
+    gap: 16px;
+  }
+  .intro-description {
+    font-size: 14px;
+  }
+  body.letter-lesson header {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 18px 16px;
+  }
+  body.letter-lesson .hleft {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    text-align: center;
+  }
+  body.letter-lesson #topStatus {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+  }
+  body.letter-lesson .hright {
+    grid-column: 1;
+    grid-row: 3;
+    justify-content: center;
+    gap: 10px;
+  }
+  body.letter-lesson #round {
+    justify-content: center;
+  }
+  body.letter-lesson #prompt {
+    max-width: 94vw;
+    padding: 6px 0;
+  }
+  .match-board {
+    gap: 16px;
+  }
+  .match-card {
+    height: 60px;
+    gap: 10px;
+  }
+  .audio-wave {
+    gap: 2px;
+  }
+  .audio-wave i {
+    width: 2px;
+  }
+  .cloze-slots {
+    font-size: clamp(26px, 6.5vw, 36px);
+  }
+  .cloze-help {
+    flex-direction: column;
+  }
+}
+/* ------------------------------- */

@@ -1,0 +1,89 @@
+#timeline {
+  flex: none;
+  padding: 0 26px 12px;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.tl-ch {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: #232a34;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.tl-ch.done {
+  background: var(--done);
+}
+.tl-ch.active {
+  background: #2a3340;
+}
+.tl-ch.active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+  transition: transform 0.2s ease;
+}
+.tl-ch > span {
+  display: none;
+}
+.tl-ch.active.signed::before {
+  display: none;
+}
+.tl-ch.active.signed > span {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.tl-base {
+  left: 0;
+  width: var(--zero);
+  background: var(--accent);
+}
+.tl-ch.active.signed.negative .tl-base {
+  background: rgba(240, 120, 72, 0.45);
+}
+.tl-gain {
+  left: var(--zero);
+  right: 0;
+  background: var(--accent);
+  transform: scaleX(var(--gain, 0));
+  transform-origin: left center;
+  transition: transform 0.2s ease;
+}
+.tl-debt {
+  left: 0;
+  width: var(--zero);
+  background: var(--debt);
+  transform: scaleX(var(--debt-fill, 0));
+  transform-origin: right center;
+  transition: transform 0.2s ease;
+}
+.tl-zero {
+  left: var(--zero);
+  width: 1px;
+  background: var(--bg);
+}
+.tl-ch.active.signed.full .tl-base,
+.tl-ch.active.signed.full .tl-gain {
+  background: var(--done);
+}
+#masteryLegend:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 16px;
+  padding: 0 26px 4px;
+  flex: none;
+  font-size: 12px;
+  color: #8a94a3;
+}
+#masteryLegend .legend-debt {
+  color: var(--debt);
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "chapter": "letter-listening",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "alphabet-cloze",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "uppercase-letters",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "lowercase-hints",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "uppercase-strings",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "lowercase-string-hints",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "lowercase-strings",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "number-keys",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "spaces",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "newlines",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "newlines-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "case-switch",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "case-switch-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "shift-symbols",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "shift-symbols-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-punctuation",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-punctuation-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "punctuation",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "punctuation-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "mixed-paragraphs",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "mixed-paragraphs-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-sentences-full",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-sentences-full-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-paragraphs-full",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-paragraphs-full-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-english",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-english-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-abbreviations",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "chinese-abbreviations-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "mixed-pinyin",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "mixed-pinyin-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "paragraph-abbreviations",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "paragraph-abbreviations-blank",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "multiline-mixed",
+    "changedPixels": 0
+  },
+  {
+    "chapter": "multiline-mixed-blank",
+    "changedPixels": 0
+  }
+]

@@ -1,0 +1,62 @@
+{
+  "stats": {
+    "startTime": "2026-10-13T10:30:16.521Z",
+    "duration": 65619.948,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "three automatic A–Z rounds, sounds on every key, retry only after three, and cloze judges complete answers",
+      "status": "passed",
+      "durationMs": 13308
+    },
+    {
+      "title": "all listening modes: free playback, repeated penalties, whole-board credit, hints clear credit and retain debts",
+      "status": "passed",
+      "durationMs": 10805
+    },
+    {
+      "title": "all 33 typing chapters accept internal input modes, update prompts, and errors/timeouts restart the chapter",
+      "status": "passed",
+      "durationMs": 16605
+    },
+    {
+      "title": "all 26 local pronunciations are preloaded and play without further requests; corpus import replaces prompts",
+      "status": "passed",
+      "durationMs": 2337
+    },
+    {
+      "title": "desktop and narrow layouts retain centered input status and chapter-sized timeline",
+      "status": "passed",
+      "durationMs": 23083
+    },
+    {
+      "title": "mastery completion advances both letter chapters, and finishing the course increases difficulty",
+      "status": "passed",
+      "durationMs": 11462
+    },
+    {
+      "title": "old/new parity: all 35 chapters have identical content, steps, layout and screenshots",
+      "status": "passed",
+      "durationMs": 19828
+    },
+    {
+      "title": "old/new parity: listening variants, completed preparation and cloze at desktop/mobile widths",
+      "status": "passed",
+      "durationMs": 24242
+    },
+    {
+      "title": "imported sentence displays le, accepts its keys and highlights both corresponding characters",
+      "status": "passed",
+      "durationMs": 1159
+    },
+    {
+      "title": "blank-line and abbreviation chapters use contextual pronunciations after import",
+      "status": "passed",
+      "durationMs": 1439
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+[
+  {
+    "number": 1,
+    "id": "letter-listening",
+    "title": "字母发音与符号匹配",
+    "kind": "listening",
+    "compiler": "sequence"
+  },
+  {
+    "number": 2,
+    "id": "alphabet-cloze",
+    "title": "字母顺序完形填空",
+    "kind": "cloze",
+    "compiler": "sequence"
+  },
+  {
+    "number": 3,
+    "id": "uppercase-letters",
+    "title": "大写字母",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 4,
+    "id": "lowercase-hints",
+    "title": "小写字母 · 带提示",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 5,
+    "id": "uppercase-strings",
+    "title": "大写字母串",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 6,
+    "id": "lowercase-string-hints",
+    "title": "小写字母串 · 带提示",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 7,
+    "id": "lowercase-strings",
+    "title": "小写字母串",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 8,
+    "id": "number-keys",
+    "title": "数字键",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 9,
+    "id": "spaces",
+    "title": "空格",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 10,
+    "id": "newlines",
+    "title": "回车换行",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 11,
+    "id": "newlines-blank",
+    "title": "回车换行 · 空行撰写",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 12,
+    "id": "case-switch",
+    "title": "大小写切换",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 13,
+    "id": "case-switch-blank",
+    "title": "大小写切换 · 空行撰写",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 14,
+    "id": "shift-symbols",
+    "title": "符号 · Shift 组合",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 15,
+    "id": "shift-symbols-blank",
+    "title": "符号 · Shift 组合 · 空行撰写",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 16,
+    "id": "chinese-punctuation",
+    "title": "中文标点 · 全角",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 17,
+    "id": "chinese-punctuation-blank",
+    "title": "中文标点 · 全角 · 空行撰写",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 18,
+    "id": "punctuation",
+    "title": "标点符号",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 19,
+    "id": "punctuation-blank",
+    "title": "标点符号 · 空行撰写",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 20,
+    "id": "mixed-paragraphs",
+    "title": "混合段落",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 21,
+    "id": "mixed-paragraphs-blank",
+    "title": "混合段落 · 空行撰写",
+    "kind": "typing",
+    "compiler": "sequence"
+  },
+  {
+    "number": 22,
+    "id": "chinese-sentences-full",
+    "title": "中文句子 · 全拼",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 23,
+    "id": "chinese-sentences-full-blank",
+    "title": "中文句子 · 全拼 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 24,
+    "id": "chinese-paragraphs-full",
+    "title": "中文段落 · 全拼",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 25,
+    "id": "chinese-paragraphs-full-blank",
+    "title": "中文段落 · 全拼 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 26,
+    "id": "chinese-english",
+    "title": "中英切换",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 27,
+    "id": "chinese-english-blank",
+    "title": "中英切换 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 28,
+    "id": "chinese-abbreviations",
+    "title": "中文缩写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 29,
+    "id": "chinese-abbreviations-blank",
+    "title": "中文缩写 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 30,
+    "id": "mixed-pinyin",
+    "title": "缩写 + 全拼 混合",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 31,
+    "id": "mixed-pinyin-blank",
+    "title": "缩写 + 全拼 混合 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 32,
+    "id": "paragraph-abbreviations",
+    "title": "中文段落 · 缩写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 33,
+    "id": "paragraph-abbreviations-blank",
+    "title": "中文段落 · 缩写 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 34,
+    "id": "multiline-mixed",
+    "title": "最终 · 多行混合",
+    "kind": "typing",
+    "compiler": "prompt"
+  },
+  {
+    "number": 35,
+    "id": "multiline-mixed-blank",
+    "title": "最终 · 多行混合 · 空行撰写",
+    "kind": "typing",
+    "compiler": "prompt"
+  }
+]

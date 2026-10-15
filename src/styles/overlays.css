@@ -1,0 +1,236 @@
+#overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  text-align: center;
+  padding: 2rem;
+  transition: opacity 0.35s;
+}
+#overlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+#overlay h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.06em;
+}
+#overlay p {
+  margin: 0;
+  color: #6b7684;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  max-width: 45em;
+}
+#overlay .row {
+  display: flex;
+  gap: 12px;
+  margin-top: 0.4rem;
+}
+#startBtn,
+#loadBtn {
+  font-family: inherit;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  padding: 12px 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.18s;
+  font-weight: 700;
+}
+#startBtn {
+  background: var(--accent);
+  color: #06131f;
+  border: none;
+}
+#startBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(74, 158, 255, 0.32);
+}
+#loadBtn {
+  background: transparent;
+  color: #7b8794;
+  border: 1px solid #232a34;
+}
+#loadBtn:hover {
+  background: #171d25;
+  color: #c3ccd7;
+}
+#fileInfo {
+  font-size: 12px;
+  color: #4a9eff;
+  letter-spacing: 0.04em;
+}
+
+#debugToggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #1a1f28;
+  color: #4a9eff;
+  border: 1px solid #232a34;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  cursor: pointer;
+  z-index: 30;
+  transition: 0.2s;
+  user-select: none;
+}
+#debugToggle:hover {
+  background: #232a34;
+  transform: scale(1.06);
+}
+
+#debugPanel {
+  position: fixed;
+  right: 16px;
+  bottom: 68px;
+  width: 280px;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: #171d25;
+  border: 1px solid #232a34;
+  border-radius: 12px;
+  padding: 12px;
+  z-index: 30;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+  transition: opacity 0.15s;
+}
+#debugPanel.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+#debugPanel::-webkit-scrollbar {
+  width: 6px;
+}
+#debugPanel::-webkit-scrollbar-thumb {
+  background: #2a3340;
+  border-radius: 3px;
+}
+
+.dbg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #7b8794;
+  margin-bottom: 10px;
+  letter-spacing: 0.08em;
+}
+.dbg-header button {
+  background: none;
+  border: none;
+  color: #7b8794;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  font-family: inherit;
+}
+.dbg-header button:hover {
+  color: #fff;
+}
+.dbg-label {
+  font-size: 11px;
+  color: #59626f;
+  letter-spacing: 0.1em;
+  margin: 8px 0 6px;
+  text-transform: uppercase;
+}
+.dbg-tiers {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.dbg-tier-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #232a34;
+  color: #7b8794;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.15s;
+  letter-spacing: 0.05em;
+}
+.dbg-tier-btn:hover {
+  background: #232a34;
+  color: #c3ccd7;
+}
+.dbg-tier-btn.cur {
+  background: rgba(74, 158, 255, 0.18);
+  border-color: rgba(74, 158, 255, 0.5);
+  color: var(--accent);
+  font-weight: 700;
+}
+.dbg-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #c3ccd7;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.12s;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+.dbg-item:hover {
+  background: #232a34;
+}
+.dbg-item.cur {
+  background: rgba(74, 158, 255, 0.15);
+  color: var(--accent);
+  font-weight: 600;
+}
+.dbg-item .dbg-num {
+  color: #59626f;
+  margin-right: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.dbg-item.cur .dbg-num {
+  color: var(--accent);
+}
+
+#rawBox {
+  margin-top: 10px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  color: #7b8794;
+  background: #0e1116;
+  padding: 8px;
+  border-radius: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.5;
+}
+#rawBox::-webkit-scrollbar {
+  width: 4px;
+}
+#rawBox::-webkit-scrollbar-thumb {
+  background: #2a3340;
+  border-radius: 2px;
+}
+
+/* ------------------------------- */
+/* 预备章节沿用暗色背景与蓝色强调色。 */

@@ -1,0 +1,71 @@
+<div id="app">
+  <header>
+    <div class="hleft">
+      <div id="chTitle">大写字母</div>
+      <div id="chDesc">按下屏幕上显示的按键</div>
+    </div>
+
+    <!-- 顶部状态栏（居中包含输入法与大小写状态指示器） -->
+    <div id="topStatus">
+      <div id="imeMode" title="当前模拟输入法状态">EN</div>
+      <div id="capsMode" title="本站输入大小写状态">大写</div>
+    </div>
+
+    <div class="hright">
+      <div id="tier">难度 1 / 4</div>
+      <div id="round">1 / 30</div>
+      <div id="err">错误 0</div>
+    </div>
+  </header>
+
+  <div id="timeline"></div>
+  <div id="masteryLegend" hidden>
+    <span>小条中竖线为 0%</span
+    ><span>左区：蓝色基线 / <span class="legend-debt">橙红欠分</span></span
+    ><span>右区：正向进度</span>
+  </div>
+
+  <main>
+    <div id="prompt"></div>
+    <div id="target" lang="en"></div>
+    <div id="hint"></div>
+  </main>
+
+  <footer>
+    <div class="barwrap"><div id="bar"></div></div>
+  </footer>
+</div>
+
+<div id="pinyinWarn">拼音库未加载，已启用内置回退字表</div>
+<div id="flash"></div>
+
+<div id="debugToggle" title="调试面板">⚙</div>
+<div id="debugPanel" class="hide">
+  <div class="dbg-header">
+    <span>调试 · 跳转</span>
+    <button id="dbgClose">×</button>
+  </div>
+  <div class="dbg-label">难度</div>
+  <div class="dbg-tiers" id="dbgTiers"></div>
+  <div class="dbg-label">章节</div>
+  <div id="dbgList"></div>
+  <div class="dbg-label">当前状态与序列</div>
+  <div id="rawBox"></div>
+</div>
+
+<div id="overlay">
+  <h1>键 盘 练 习</h1>
+  <p>
+    看着屏幕上的字符，立即按下键盘上对应的按键。<br />
+    前两章积累熟练度与博学度，进度满分后进入下一章；后续章节按错或超时会从本章第 1 题重来。<br />
+    <b style="color: #f0b429">橙色箭头</b>表示 CapsLock，<b style="color: #4a9eff">蓝色箭头</b>表示
+    Shift。<br />
+    顶部显示本站的输入法与大小写状态，由章节和练习中的操作决定。实心箭头代表<b>按下</b>，虚线箭头代表<b>松开</b>。<br />
+  </p>
+  <div class="row">
+    <button id="startBtn">开 始 练 习</button>
+    <button id="loadBtn">加载外部词库</button>
+  </div>
+  <div id="fileInfo"></div>
+  <input type="file" id="fileInput" accept=".txt" style="display: none" />
+</div>
