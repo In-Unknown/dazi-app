@@ -3,6 +3,8 @@ import { createApplication } from './app/controller';
 import { CH } from './chapters/catalog';
 import { getAudioContext } from './audio/context';
 import { prepareLetterAudio } from './audio/pronunciation';
+import { prepareSymbolAudio } from './audio/symbol-audio';
+import { PINYIN_AUDIO_POOL } from './audio/pinyin';
 import { installKeyboard } from './input/keyboard';
 import { installDebugPanel } from './ui/debug';
 import { installCorpusImport } from './ui/import-corpus';
@@ -16,7 +18,9 @@ const listeners = new AbortController();
 installKeyboard(overlay, application, listeners.signal);
 installDebugPanel(ui, listeners.signal);
 installCorpusImport(ui, listeners.signal);
-prepareLetterAudio().catch((error) => console.warn('字母音频准备失败:', error));
+const prepareAllAudio = () =>
+  Promise.all([prepareLetterAudio(), prepareSymbolAudio(PINYIN_AUDIO_POOL)]).then(() => undefined);
+prepareAllAudio().catch((error) => console.warn('音频准备失败:', error));
 const start = $<HTMLButtonElement>('#startBtn');
 start.addEventListener(
   'click',
@@ -24,9 +28,9 @@ start.addEventListener(
     getAudioContext();
     start.disabled = true;
     try {
-      await prepareLetterAudio();
+      await prepareAllAudio();
     } catch {
-      fileInfo.textContent = '字母发音未能准备，请点击开始重试。';
+      fileInfo.textContent = '发音未能准备，请点击开始重试。';
       start.disabled = false;
       return;
     }

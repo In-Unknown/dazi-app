@@ -1,7 +1,7 @@
 import type { ExerciseContext } from '../../exercises/contracts';
 import type { ListeningOptions } from './chapter';
 import type { MatchQuestion } from './types';
-import { stopLetterAudio, playLetterAudio } from '../../audio/pronunciation';
+import { stopSymbolAudio, playSymbolAudio } from '../../audio/symbol-audio';
 import { playSuccessSound, playErrorSound } from '../../audio/feedback';
 import { speakerIcon } from '../../ui/icons';
 
@@ -12,8 +12,9 @@ export function renderListening(
 ) {
   const { promptEl, hintEl, targetEl } = context.ui;
   const mastery = context.mastery!;
+  const label = options.label ?? '字母';
   let locked = false;
-  promptEl.textContent = '听发音，匹配对应的字母';
+  promptEl.textContent = `听发音，匹配对应的${label}`;
   promptEl.style.visibility = 'visible';
   hintEl.style.visibility = 'hidden';
   targetEl.classList.remove('scroll-mode', 'bm-mode');
@@ -26,22 +27,22 @@ export function renderListening(
   board.dataset.kind = question.type;
   const instruction = document.createElement('p');
   instruction.className = 'match-instruction';
-  const typeLabel = { single: '单字辨音', contrast: '易混字母', board: '多项配对' }[question.type];
-  instruction.textContent = `${typeLabel} · ${question.audios.length} 段发音，${targetLetters.length} 个字母 · 先听音，再点字母确认`;
+  const typeLabel = { single: '单字辨音', contrast: '易混辨析', board: '多项配对' }[question.type];
+  instruction.textContent = `${typeLabel} · ${question.audios.length} 段发音，${targetLetters.length} 个${label} · 先听音，再点${label}确认`;
 
-  // 左列为音频，右列为字母；每列都使用原生按钮支持键盘操作。
+  // 左列为音频，右列为符号；每列都使用原生按钮支持键盘操作。
   const colLeft = document.createElement('div');
   colLeft.className = 'match-col match-audios';
   colLeft.innerHTML = '<span class="match-col-label">听发音</span>';
   const colRight = document.createElement('div');
   colRight.className = 'match-col match-letters';
-  colRight.innerHTML = '<span class="match-col-label">选字母</span>';
+  colRight.innerHTML = `<span class="match-col-label">选${label}</span>`;
   let selectedAudio: HTMLButtonElement | null = null;
   let matchedCount = 0;
   const helpNote = document.createElement('p');
   helpNote.className = 'match-help-note';
   helpNote.setAttribute('role', 'status');
-  helpNote.textContent = '字母旁的试听提示会清空本章正分，保留负分';
+  helpNote.textContent = `${label}旁的试听提示会清空本章正分，保留负分`;
 
   const selectCard = (column: HTMLElement, card: HTMLElement | null) => {
     column.querySelectorAll('.match-card').forEach((c) => {
@@ -52,7 +53,7 @@ export function renderListening(
   };
   const checkPair = (letterCard: HTMLElement) => {
     if (!selectedAudio) {
-      helpNote.textContent = '先试听左侧发音，再点击右侧字母确认配对';
+      helpNote.textContent = `先试听左侧发音，再点击右侧${label}确认配对`;
       return;
     }
     const audioCard = selectedAudio;
@@ -61,7 +62,7 @@ export function renderListening(
     selectCard(colRight, null);
     selectedAudio = null;
     if (audioCard.dataset.letter === l) {
-      stopLetterAudio();
+      stopSymbolAudio();
       playSuccessSound();
       audioCard.classList.add('matched');
       letterCard.classList.add('matched');
@@ -77,7 +78,7 @@ export function renderListening(
       }
     } else {
       playErrorSound();
-      // 只扣当前被考查的音频字母，允许反复扣到该部分的下限。
+      // 只扣当前被考查的音频符号，允许反复扣到该部分的下限。
       mastery.penalize(audioCard.dataset.letter!);
       context.recordError();
       audioCard.classList.add('wrong');
@@ -102,7 +103,7 @@ export function renderListening(
       `<span class="audio-wave" aria-hidden="true">${heights.map((height, i) => `<i style="--bar-height:${height}px;--bar-delay:${i * -45}ms"></i>`).join('')}</span>`;
     card.onclick = () => {
       if (locked || card.disabled) return;
-      playLetterAudio(l, card);
+      playSymbolAudio(options.audio, l, card);
       selectCard(colLeft, card);
       selectedAudio = card;
     };
@@ -113,14 +114,14 @@ export function renderListening(
     const card = document.createElement('div');
     card.className = 'match-card';
     card.dataset.letter = l;
-    card.innerHTML = `<button type="button" class="match-letter-select" aria-label="选择字母 ${l}" aria-pressed="false">${l}</button><button type="button" class="listen-icon-btn" aria-label="试听字母 ${l}（清空本章正分，保留负分）" title="试听 ${l} · 清空本章正分，保留负分">${speakerIcon}</button>`;
+    card.innerHTML = `<button type="button" class="match-letter-select" aria-label="选择${label} ${l}" aria-pressed="false">${l}</button><button type="button" class="listen-icon-btn" aria-label="试听${label} ${l}（清空本章正分，保留负分）" title="试听 ${l} · 清空本章正分，保留负分">${speakerIcon}</button>`;
     card.querySelector<HTMLButtonElement>('.match-letter-select')!.onclick = () => {
       if (locked || card.classList.contains('matched')) return;
       checkPair(card);
     };
     card.querySelector<HTMLButtonElement>('.listen-icon-btn')!.onclick = () => {
       if (locked || card.classList.contains('matched')) return;
-      playLetterAudio(l);
+      playSymbolAudio(options.audio, l);
       mastery.revealHint();
       context.refresh();
       helpNote.textContent = '本章正分已清空，负分保留，本组不计分';

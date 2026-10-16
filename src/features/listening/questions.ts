@@ -47,19 +47,17 @@ export function makeMatchQuestion(
     if (type === 'contrast') {
       const pairs = shuffle(
         confusable.filter(
-          (pair) => pair.includes(anchor) && [...pair].every((l) => symbols.includes(l)),
+          (pair) => pair.includes(anchor) && pair.every((l) => symbols.includes(l)),
         ),
       );
       const pair = pairs[0];
       targets.push(
-        pair
-          ? [...pair].find((l) => l !== anchor)!
-          : [...weak, ...review].find((l) => l !== anchor)!,
+        pair ? pair.find((l) => l !== anchor)! : [...weak, ...review].find((l) => l !== anchor)!,
       );
     }
   }
   const related = shuffle([
-    ...new Set(confusable.filter((pair) => targets.some((l) => pair.includes(l))).join('')),
+    ...new Set(confusable.filter((pair) => targets.some((l) => pair.includes(l))).flat()),
   ]).filter((l) => !targets.includes(l) && audioPool.includes(l));
   const others = shuffle(audioPool.filter((l) => !targets.includes(l) && !related.includes(l)));
   const audioCount =

@@ -16,10 +16,10 @@ vi.mock('../../src/audio/feedback', () => ({
   playKeySuccessSound: vi.fn(),
   playErrorSound: vi.fn(),
 }));
-vi.mock('../../src/audio/pronunciation', () => ({
-  playLetterAudio: vi.fn(),
-  stopLetterAudio: vi.fn(),
-}));
+vi.mock('../../src/audio/pronunciation', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../src/audio/pronunciation')>();
+  return { ...actual, playLetterAudio: vi.fn(), stopLetterAudio: vi.fn() };
+});
 
 const cleanups: (() => void)[] = [];
 beforeEach(() => {

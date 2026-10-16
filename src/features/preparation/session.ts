@@ -1,42 +1,144 @@
 import type { ExerciseContext } from '../../exercises/contracts';
 import type { PreparationOptions } from './options';
 import { speakerIcon } from '../../ui/icons';
-import { playLetterAudio } from '../../audio/pronunciation';
+import { playSymbolAudio, symbolAudioDurationMs } from '../../audio/symbol-audio';
 import { codeToChar } from '../../input/keymap';
+import { shuffle } from '../../core/random';
 import { playSuccessSound, playKeySuccessSound, playErrorSound } from '../../audio/feedback';
 
-/** Reusable introduction. Its caller chooses the mode, alphabet, rounds and whether to show it. */
+/** 引导试听：每段之间的停顿，以及测量失败时的回退时长。 */
+const CLIP_GAP_MS = 350;
+const FALLBACK_CLIP_MS = 700;
+
+/** 可复用的介绍页：调用方决定模式、符号、轮次、音频池与是否展示。 */
 export function createPreparation(context: ExerciseContext, options: PreparationOptions) {
   const { promptEl, targetEl } = context.ui;
   const symbols = options.symbols;
+  const label = options.label ?? '字母';
   const isListening = options.mode === 'listen';
   const range = `${symbols[0]}–${symbols.at(-1)}`;
   const roundLabel = options.rounds === 3 ? '三' : String(options.rounds);
   let active = options.enabled;
-  const state = { heard: new Set<string>(), position: 0, completed: 0, locked: false };
+  const state = {
+    heard: new Set<string>(),
+    position: 0,
+    completed: 0,
+    locked: false,
+    sequenceRunning: false,
+    sequenceDone: false,
+  };
+  const tiles = new Map<string, HTMLElement>();
+  let currentGrid: HTMLElement | null = null;
+
+  const introStatus = () => targetEl.querySelector<HTMLElement>('#introStatus');
+  const continueButton = () => targetEl.querySelector<HTMLButtonElement>('#lessonContinue');
+  const setStatus = (text: string) => {
+    const status = introStatus();
+    if (status) status.textContent = text;
+  };
+
+  /**
+   * 让整块符号板在可视高度内排布：先算高度最多能放几行，放不下就增加列数（加宽），
+   * 而不是纵向滚动。同时按列数限制网格最大宽度，避免方块被拉得过宽。
+   */
+  function applyGridLayout(grid: HTMLElement) {
+    const count = symbols.length;
+    const mobile = window.innerWidth <= 600;
+    const gap = mobile ? 8 : 10;
+    const tileH = mobile ? 54 : 64;
+    const tileTargetW = mobile ? 64 : 96;
+    // 预留顶部 header、状态行、按钮与间距，避免它们把网格挤出视口。
+    const reserved = mobile ? 200 : 250;
+    const available = Math.max(tileH, window.innerHeight - reserved);
+    const maxRows = Math.max(1, Math.floor((available + gap) / (tileH + gap)));
+    const minCols = Math.min(7, count);
+    // 宽度上限：保证每列不小于约 54px，避免过窄。
+    const boardW = Math.min(1080, window.innerWidth * 0.94);
+    const maxColsByWidth = Math.max(1, Math.floor((boardW + gap) / (54 + gap)));
+    const cols = Math.min(Math.max(minCols, Math.ceil(count / maxRows)), maxColsByWidth);
+    grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+    grid.style.maxWidth = `${cols * (tileTargetW + gap) - gap}px`;
+  }
+
+  const relayout = () => {
+    if (currentGrid) applyGridLayout(currentGrid);
+  };
+  window.addEventListener('resize', relayout);
+
+  /** 引导播放期间禁用全部音频方块，使其变灰且不可触发。 */
+  function setTilesDisabled(disabled: boolean) {
+    if (!isListening) return;
+    tiles.forEach((tile) => {
+      if (tile instanceof HTMLButtonElement) tile.disabled = disabled;
+    });
+  }
+
+  /** 播放单个符号并点亮其方格。 */
+  function playSymbol(symbol: string) {
+    if (options.audio) playSymbolAudio(options.audio, symbol, tiles.get(symbol));
+    state.heard.add(symbol);
+    tiles.get(symbol)?.classList.add('heard');
+  }
+
+  function clipDurationMs(symbol: string) {
+    const measured = options.audio ? symbolAudioDurationMs(options.audio, symbol) : null;
+    return (measured == null ? FALLBACK_CLIP_MS : measured) + CLIP_GAP_MS;
+  }
+
+  /** 正序 + 倒序 + 两遍打乱：顺序变化但不重复、不遗漏任何符号。 */
+  function buildGuidedOrder(): string[] {
+    return [
+      ...symbols,
+      ...[...symbols].reverse(),
+      ...shuffle([...symbols]),
+      ...shuffle([...symbols]),
+    ];
+  }
+
+  function runGuidedStep(order: string[], index: number) {
+    if (!active || !state.sequenceRunning) return;
+    if (index >= order.length) {
+      state.sequenceRunning = false;
+      state.sequenceDone = true;
+      const next = continueButton();
+      if (next) next.disabled = false;
+      setTilesDisabled(false);
+      setStatus('');
+      return;
+    }
+    const symbol = order[index];
+    playSymbol(symbol);
+    setStatus(`${index + 1} / ${order.length}`);
+    context.tasks.after(clipDurationMs(symbol), () => runGuidedStep(order, index + 1));
+  }
+
+  function startGuidedSequence() {
+    if (!isListening || state.sequenceRunning) return;
+    state.sequenceRunning = true;
+    const next = continueButton();
+    if (next) next.disabled = true;
+    setTilesDisabled(true);
+    runGuidedStep(buildGuidedOrder(), 0);
+  }
 
   function renderLessonIntro() {
     context.setDescription(
-      isListening
-        ? `学习准备 · 逐个试听 ${range}，准备好后继续`
-        : `学习准备 · 完整输入 ${range} ${roundLabel}轮，输错重来当前轮`,
+      isListening ? `学习准备 · 逐个试听 ${range}` : `学习准备 · 完整输入 ${range} ${roundLabel}轮`,
     );
-    promptEl.textContent = isListening ? '先认识字母的发音' : `先熟悉 ${range} 的顺序`;
+    promptEl.textContent = isListening
+      ? `先认识${label}的发音${options.promptNote ? ' ' + options.promptNote : ''}`
+      : `先熟悉 ${range} 的顺序`;
     targetEl.innerHTML = '';
+    tiles.clear();
     const board = document.createElement('div');
     board.className = 'intro-board';
-    const description = document.createElement('p');
-    description.className = 'intro-description';
-    description.textContent = isListening
-      ? '点击字母逐个试听，可以反复听。准备好后再开始配对。'
-      : `从 ${symbols[0]} 到 ${symbols.at(-1)} 按顺序输入，自动练习 ${options.rounds} 轮。输错重来当前轮；完成${roundLabel}轮后可以手动加练。`;
     const grid = document.createElement('div');
     grid.className = 'alphabet-grid';
     grid.setAttribute('role', 'group');
     grid.setAttribute(
       'aria-label',
       isListening
-        ? `${symbols[0]}到${symbols.at(-1)}字母发音表`
+        ? `${symbols[0]}到${symbols.at(-1)}${label}发音表`
         : `${symbols[0]}到${symbols.at(-1)}顺序练习`,
     );
     symbols.forEach((letter, index) => {
@@ -45,34 +147,41 @@ export function createPreparation(context: ExerciseContext, options: Preparation
       tile.dataset.letter = letter;
       if (isListening) {
         tile.setAttribute('type', 'button');
-        tile.setAttribute('aria-label', `试听字母 ${letter}`);
+        tile.setAttribute('aria-label', `试听${label} ${letter}`);
         tile.innerHTML = `<span>${letter}</span>${speakerIcon}`;
         tile.classList.toggle('heard', state.heard.has(letter));
         tile.onclick = () => {
-          playLetterAudio(letter, tile);
-          state.heard.add(letter);
-          tile.classList.add('heard');
-          targetEl.querySelector<HTMLElement>('#introStatus')!.textContent =
-            `已试听 ${state.heard.size} / ${symbols.length} 个字母 · 可重复试听`;
+          // 引导试听进行中不接受手动点击，避免打断连续播放；也不改动提示文案。
+          if (state.sequenceRunning) return;
+          playSymbol(letter);
         };
       } else {
         tile.textContent = letter;
         tile.classList.add(index < state.position ? 'done' : 'ghost');
       }
+      tiles.set(letter, tile);
       grid.appendChild(tile);
     });
+    currentGrid = grid;
+    applyGridLayout(grid);
+    // 重入且引导仍在进行时，新渲染的方块立即回到禁用态。
+    if (state.sequenceRunning) setTilesDisabled(true);
     const status = document.createElement('div');
     status.id = 'introStatus';
     status.className = 'intro-status';
     status.setAttribute('role', 'status');
-    status.textContent = `已试听 ${state.heard.size} / ${symbols.length} 个字母 · 可重复试听`;
+    status.textContent = isListening ? '按空格开始' : '';
     const next = document.createElement('button');
     next.id = 'lessonContinue';
     next.type = 'button';
     next.className = 'lesson-continue';
     next.textContent = isListening ? '继续，开始配对' : '继续，开始填空';
+    // listen 模式需先听完引导试听才可继续；sequence 模式由 renderAlphabetPractice 控制。
+    next.disabled = isListening;
     next.onclick = () => {
-      if (!isListening && state.completed < options.rounds) return;
+      if (isListening) {
+        if (!state.sequenceDone) return;
+      } else if (state.completed < options.rounds) return;
       active = false;
       context.restartRound();
     };
@@ -94,7 +203,7 @@ export function createPreparation(context: ExerciseContext, options: Preparation
       actions.appendChild(retry);
     }
     actions.appendChild(next);
-    board.append(description, grid, status, actions);
+    board.append(grid, status, actions);
     targetEl.appendChild(board);
     if (!isListening) renderAlphabetPractice();
   }
@@ -119,7 +228,7 @@ export function createPreparation(context: ExerciseContext, options: Preparation
           ? ready
             ? '可以开始填空，也可以再练一轮'
             : `本轮全部正确，即将自动开始第 ${state.completed + 1} 轮`
-          : `本轮 ${state.position} / ${symbols.length} · 下一个字母 ${symbols[state.position]}`));
+          : `本轮 ${state.position} / ${symbols.length}`));
     targetEl.querySelector<HTMLButtonElement>('#lessonContinue')!.disabled = !ready;
     targetEl.querySelector<HTMLElement>('#lessonRetry')!.hidden = !(complete && ready);
   }
@@ -129,7 +238,15 @@ export function createPreparation(context: ExerciseContext, options: Preparation
     const isShift = code === 'ShiftLeft' || code === 'ShiftRight' || code === 'Shift';
     const isCaps = code === 'CapsLock';
 
-    if (isListening || state.locked) return;
+    // listen 模式：空格启动引导试听；焦点在“继续”按钮上时交回原生行为。
+    if (isListening) {
+      if (code !== 'Space') return;
+      if (e.target instanceof Element && e.target.closest('#lessonContinue')) return;
+      e.preventDefault();
+      startGuidedSequence();
+      return;
+    }
+    if (state.locked) return;
     if (
       e.target instanceof Element &&
       e.target.closest('button') &&
@@ -181,5 +298,8 @@ export function createPreparation(context: ExerciseContext, options: Preparation
       renderLessonIntro();
     },
     keyDown: onPreparationKeyDown,
+    dispose() {
+      window.removeEventListener('resize', relayout);
+    },
   };
 }

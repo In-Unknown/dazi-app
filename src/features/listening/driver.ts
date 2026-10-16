@@ -28,5 +28,8 @@ export function createListeningSession(
     keyDown(event) {
       if (intro.isPreparing()) intro.keyDown(event);
     },
+    dispose() {
+      intro.dispose?.();
+    },
   };
 }

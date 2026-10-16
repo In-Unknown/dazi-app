@@ -9,7 +9,10 @@ export const sxListening = defineListeningChapter({
   questions: {
     symbols: ['S', 'X'],
     audioPool: ['S', 'X', 'H', 'N'],
-    confusable: ['SX', 'HN'],
+    confusable: [
+      ['S', 'X'],
+      ['H', 'N'],
+    ],
     mix: ['contrast'],
   },
   mastery: { standard: 4, reward: 2 },

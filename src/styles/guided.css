@@ -1,0 +1,16 @@
+/* 引导连续试听期间，音频方块禁用并变灰，直到全部播放完毕。 */
+.alphabet-tile:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+/* 正在播放的方块保持高亮，不随禁用一起变灰；仍不可点击。 */
+.alphabet-tile.playing:disabled {
+  opacity: 1;
+}
+/* 符号板允许更宽，配合 JS 按高度自适应列数，避免纵向滚动。 */
+.intro-board {
+  width: min(1080px, 94vw);
+}
+.alphabet-grid {
+  margin: 0 auto;
+}

@@ -6,3 +6,5 @@ tests/fixtures
 package-lock.json
 docs/migration-baseline.json
 docs/chapter-inventory.json
+tmp-cmn
+tmp-tts

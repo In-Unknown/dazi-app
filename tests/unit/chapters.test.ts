@@ -8,8 +8,8 @@ import { sanitizeText } from '../../src/content/text';
 import { wordPinyin } from '../../src/content/pinyin';
 
 describe('chapter catalog and content', () => {
-  it('contains all 35 chapters and all generators produce usable input', () => {
-    expect(CH).toHaveLength(35);
+  it('contains all 40 chapters and all generators produce usable input', () => {
+    expect(CH).toHaveLength(40);
     for (const chapter of CH.filter(isTypingChapter)) {
       const rounds = chapter.buildList?.() ?? [chapter.gen!()];
       expect(rounds.length).toBeGreaterThan(0);
