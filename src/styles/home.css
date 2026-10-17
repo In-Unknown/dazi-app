@@ -1,0 +1,180 @@
+/* 开始界面视觉增强。
+ * 本文件在 overlays.css 之后加载，用于覆盖 #overlay 及其子元素的观感；
+ * overlays.css 本身被 tests/unit/resources.test.ts 锁定，不能直接修改。 */
+
+#overlay {
+  gap: 0;
+  background:
+    radial-gradient(1100px 560px at 50% -12%, rgba(74, 158, 255, 0.18), transparent 68%),
+    radial-gradient(820px 460px at 88% 112%, rgba(61, 220, 132, 0.09), transparent 70%),
+    var(--bg);
+  overflow: hidden;
+}
+
+/* 缓慢漂移的背景光斑 */
+.home-glow {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(74, 158, 255, 0.14), transparent),
+    radial-gradient(closest-side, rgba(61, 220, 132, 0.1), transparent);
+  background-size: 46% 46%, 38% 38%;
+  background-position: 28% 32%, 74% 68%;
+  background-repeat: no-repeat;
+  animation: home-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes home-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(2%, 2%, 0) scale(1.08);
+  }
+}
+
+.home-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+  padding: clamp(2rem, 4.5vw, 3rem) clamp(2.2rem, 6vw, 4rem);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(23, 29, 37, 0.94), rgba(14, 17, 22, 0.9));
+  border: 1px solid rgba(74, 158, 255, 0.16);
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  animation: home-rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 两枚键帽图标 */
+.home-badge {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 0.1rem;
+}
+.home-key {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #dce8f8;
+  background: linear-gradient(180deg, #232c38, #171d25);
+  border: 1px solid #303945;
+  border-bottom-width: 3px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+.home-card:hover .home-key {
+  border-color: rgba(74, 158, 255, 0.45);
+  color: #9fc6ff;
+}
+.home-card:hover .home-key:first-child {
+  transform: translateY(-2px) rotate(-3deg);
+}
+.home-card:hover .home-key:last-child {
+  transform: translateY(-2px) rotate(3deg);
+}
+
+#overlay h1 {
+  font-size: clamp(1.9rem, 4.6vw, 2.8rem);
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  background: linear-gradient(180deg, #ffffff 20%, #9fc6ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.home-tagline {
+  margin: 0;
+  color: #7b8794;
+  font-size: clamp(0.82rem, 1.9vw, 0.95rem);
+  letter-spacing: 0.12em;
+}
+
+#overlay .row {
+  margin-top: 0.7rem;
+  gap: 14px;
+}
+
+#startBtn,
+#loadBtn {
+  padding: 13px 38px;
+  border-radius: 12px;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+}
+
+#startBtn {
+  background: linear-gradient(180deg, #63acff, var(--accent));
+  color: #04101c;
+  box-shadow: 0 10px 28px rgba(74, 158, 255, 0.28);
+}
+
+#startBtn:hover {
+  box-shadow: 0 14px 36px rgba(74, 158, 255, 0.42);
+}
+
+#startBtn:active {
+  transform: translateY(0) scale(0.985);
+  box-shadow: 0 6px 18px rgba(74, 158, 255, 0.3);
+}
+
+#loadBtn {
+  border-color: #2b3441;
+}
+
+#startBtn:focus-visible,
+#loadBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+#fileInfo:empty {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .home-card {
+    width: min(92vw, 460px);
+    border-radius: 20px;
+  }
+  #overlay .row {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  #startBtn,
+  #loadBtn {
+    width: 100%;
+    padding: 13px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-glow,
+  .home-card,
+  .home-key {
+    animation: none;
+    transition: none;
+  }
+}

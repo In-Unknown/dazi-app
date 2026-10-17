@@ -49,18 +49,19 @@
 </div>
 
 <div id="overlay">
-  <h1>键 盘 练 习</h1>
-  <p>
-    看着屏幕上的字符，立即按下键盘上对应的按键。<br />
-    前两章积累熟练度与博学度，进度满分后进入下一章；后续章节按错或超时会从本章第 1 题重来。<br />
-    <b style="color: #f0b429">橙色箭头</b>表示 CapsLock，<b style="color: #4a9eff">蓝色箭头</b>表示
-    Shift。<br />
-    顶部显示本站的输入法与大小写状态，由章节和练习中的操作决定。实心箭头代表<b>按下</b>，虚线箭头代表<b>松开</b>。<br />
-  </p>
-  <div class="row">
-    <button id="startBtn">开 始 练 习</button>
-    <button id="loadBtn">加载外部词库</button>
+  <div class="home-glow" aria-hidden="true"></div>
+  <div class="home-card">
+    <div class="home-badge" aria-hidden="true">
+      <span class="home-key">A</span>
+      <span class="home-key">键</span>
+    </div>
+    <h1>键盘练习</h1>
+    <p class="home-tagline">从字母到拼音，把手指练成本能</p>
+    <div class="row">
+      <button id="startBtn">开始练习</button>
+      <button id="loadBtn">加载外部词库</button>
+    </div>
+    <div id="fileInfo"></div>
+    <input type="file" id="fileInput" accept=".txt" style="display: none" />
   </div>
-  <div id="fileInfo"></div>
-  <input type="file" id="fileInput" accept=".txt" style="display: none" />
 </div>
