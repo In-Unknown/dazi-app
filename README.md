@@ -6,10 +6,9 @@
 
 ## 开始使用
 
-本机已安装项目依赖。打开终端：
+在项目根目录打开终端：
 
 ```powershell
-cd C:\D\03-Tool\dazi\dazi-app
 npm run dev
 ```
 
